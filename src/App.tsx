@@ -197,6 +197,13 @@ function App() {
             >
               Fit
             </button>
+            <button
+              onClick={() => setMobilePanelOpen((v) => !v)}
+              className="px-2 h-9 rounded-full bg-blue-600 text-xs font-semibold text-white shadow-lg"
+              title="Toggle controls"
+            >
+              {mobilePanelOpen ? 'Hide' : 'Controls'}
+            </button>
           </div>
 
 
@@ -209,17 +216,6 @@ function App() {
           </div>
           <PropertiesPanel />
         </aside>
-
-        {/* Floating show-controls pill – lives outside canvas-area so touch-action:none never blocks it */}
-        {!mobilePanelOpen && (
-          <button
-            onClick={() => setMobilePanelOpen(true)}
-            style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
-            className="lg:hidden absolute left-1/2 -translate-x-1/2 z-30 px-5 h-11 rounded-full bg-gray-900/90 text-white text-sm font-semibold shadow-xl"
-          >
-            ▴ Controls
-          </button>
-        )}
 
         {/* Mobile bottom sheet */}
         {mobilePanelOpen && (
