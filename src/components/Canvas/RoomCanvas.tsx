@@ -26,12 +26,13 @@ export const RoomCanvas: React.FC<RoomCanvasProps> = ({ containerWidth, containe
     placedPieces,
     selectedPieceIds,
     scale,
+    viewportZoom,
     stageOffset,
     selectPiece,
     clearSelection,
     updatePiece,
     removeSelectedPieces,
-    setScale,
+    setViewportZoom,
     setStageOffset,
   } = useLayoutStore();
 
@@ -60,28 +61,28 @@ export const RoomCanvas: React.FC<RoomCanvasProps> = ({ containerWidth, containe
       e.evt.preventDefault();
       const stage = stageRef.current;
       if (!stage) return;
-      const oldScale = scale;
+      const oldZoom = viewportZoom;
       const pointer = stage.getPointerPosition();
       if (!pointer) return;
 
       const scaleBy = 1.05;
       const direction = e.evt.deltaY < 0 ? 1 : -1;
-      const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, oldScale * (direction > 0 ? scaleBy : 1 / scaleBy)));
+      const newZoom = Math.min(MAX_SCALE, Math.max(MIN_SCALE, oldZoom * (direction > 0 ? scaleBy : 1 / scaleBy)));
 
       const mousePointTo = {
-        x: (pointer.x - stageOffset.x) / oldScale,
-        y: (pointer.y - stageOffset.y) / oldScale,
+        x: (pointer.x - stageOffset.x) / oldZoom,
+        y: (pointer.y - stageOffset.y) / oldZoom,
       };
 
       const newOffset = {
-        x: pointer.x - mousePointTo.x * newScale,
-        y: pointer.y - mousePointTo.y * newScale,
+        x: pointer.x - mousePointTo.x * newZoom,
+        y: pointer.y - mousePointTo.y * newZoom,
       };
 
-      setScale(newScale);
+      setViewportZoom(newZoom);
       setStageOffset(newOffset);
     },
-    [scale, stageOffset, setScale, setStageOffset, stageRef]
+    [viewportZoom, stageOffset, setViewportZoom, setStageOffset, stageRef]
   );
 
   // Pan via middle mouse button
@@ -169,8 +170,8 @@ export const RoomCanvas: React.FC<RoomCanvasProps> = ({ containerWidth, containe
       height={containerHeight}
       x={stageOffset.x}
       y={stageOffset.y}
-      scaleX={1}
-      scaleY={1}
+      scaleX={viewportZoom}
+      scaleY={viewportZoom}
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}

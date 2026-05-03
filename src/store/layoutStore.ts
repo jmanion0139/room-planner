@@ -15,6 +15,7 @@ const DEFAULT_SCALE = 4; // px per inch
 interface StoreState extends LayoutState {
   selectedPieceIds: string[];
   scale: number;
+  viewportZoom: number;
   stageOffset: { x: number; y: number };
 
   // Room actions
@@ -42,6 +43,7 @@ interface StoreState extends LayoutState {
 
   // Viewport
   setScale: (scale: number) => void;
+  setViewportZoom: (zoom: number) => void;
   setStageOffset: (offset: { x: number; y: number }) => void;
 }
 
@@ -51,6 +53,7 @@ export const useLayoutStore = create<StoreState>((set, get) => ({
   placedPieces: [],
   selectedPieceIds: [],
   scale: DEFAULT_SCALE,
+  viewportZoom: 1,
   stageOffset: { x: 40, y: 40 },
 
   setRoom: (changes) =>
@@ -209,5 +212,6 @@ export const useLayoutStore = create<StoreState>((set, get) => ({
     }),
 
   setScale: (scale) => set({ scale }),
+  setViewportZoom: (viewportZoom) => set({ viewportZoom }),
   setStageOffset: (stageOffset) => set({ stageOffset }),
 }));
