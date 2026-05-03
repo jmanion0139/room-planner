@@ -23,11 +23,11 @@ export const PieceLibrary: React.FC = () => {
           <div className="text-sm font-medium text-gray-800 truncate">{def.label}</div>
           <div className="text-xs text-gray-500">{def.width}" × {def.depth}"</div>
         </div>
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => addPiece(def.id)}
             title="Add to canvas"
-            className="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition-colors"
+            className="text-xs bg-blue-600 text-white px-2.5 py-1.5 rounded hover:bg-blue-700 transition-colors"
           >
             +
           </button>
@@ -35,7 +35,7 @@ export const PieceLibrary: React.FC = () => {
             <button
               onClick={() => removeDefinition(def.id)}
               title="Delete piece type"
-              className="text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition-colors"
+              className="text-xs bg-red-500 text-white px-2.5 py-1.5 rounded hover:bg-red-600 transition-colors"
             >
               ✕
             </button>

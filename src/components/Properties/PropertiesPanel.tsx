@@ -16,7 +16,7 @@ export const PropertiesPanel: React.FC = () => {
   if (selectedPieces.length === 0) {
     return (
       <div className="p-4 text-xs text-gray-400 italic">
-        Select a piece on the canvas to see its properties. Hold Ctrl to select multiple.
+        Select a piece on the canvas to see its properties. On desktop, hold Ctrl to select multiple.
       </div>
     );
   }
@@ -59,7 +59,7 @@ export const PropertiesPanel: React.FC = () => {
       <div>
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Selection</h3>
         <p className="text-sm font-bold text-gray-800">{selectedPieces.length} pieces selected</p>
-        <p className="text-xs text-gray-400 mt-0.5">Ctrl+click to add or remove pieces</p>
+        <p className="text-xs text-gray-400 mt-0.5">Desktop: Ctrl+click to add or remove pieces</p>
       </div>
 
       <div>

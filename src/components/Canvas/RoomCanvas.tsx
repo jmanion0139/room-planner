@@ -88,6 +88,18 @@ export const RoomCanvas: React.FC<RoomCanvasProps> = ({ containerWidth, containe
   // Pan via middle mouse button
   const isPanning = useRef(false);
   const lastPanPoint = useRef({ x: 0, y: 0 });
+  const pinchState = useRef<{ lastCenter: { x: number; y: number } | null; lastDistance: number | null }>({
+    lastCenter: null,
+    lastDistance: null,
+  });
+
+  const getTouchPoint = useCallback((touch: Touch, stage: Konva.Stage) => {
+    const rect = stage.container().getBoundingClientRect();
+    return {
+      x: touch.clientX - rect.left,
+      y: touch.clientY - rect.top,
+    };
+  }, []);
 
   const handleMouseDown = useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
     if (e.evt.button === 1) {
@@ -110,6 +122,88 @@ export const RoomCanvas: React.FC<RoomCanvasProps> = ({ containerWidth, containe
 
   const handleMouseUp = useCallback(() => {
     isPanning.current = false;
+  }, []);
+
+  const handleTouchStart = useCallback(
+    (e: Konva.KonvaEventObject<TouchEvent>) => {
+      if (e.evt.touches.length !== 2) return;
+      const stage = stageRef.current;
+      if (!stage) return;
+
+      const p1 = getTouchPoint(e.evt.touches[0], stage);
+      const p2 = getTouchPoint(e.evt.touches[1], stage);
+      const center = {
+        x: (p1.x + p2.x) / 2,
+        y: (p1.y + p2.y) / 2,
+      };
+      const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+
+      pinchState.current = {
+        lastCenter: center,
+        lastDistance: distance,
+      };
+    },
+    [getTouchPoint, stageRef]
+  );
+
+  const handleTouchMove = useCallback(
+    (e: Konva.KonvaEventObject<TouchEvent>) => {
+      if (e.evt.touches.length !== 2) return;
+
+      const stage = stageRef.current;
+      if (!stage) return;
+
+      e.evt.preventDefault();
+
+      const p1 = getTouchPoint(e.evt.touches[0], stage);
+      const p2 = getTouchPoint(e.evt.touches[1], stage);
+      const center = {
+        x: (p1.x + p2.x) / 2,
+        y: (p1.y + p2.y) / 2,
+      };
+      const distance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+
+      const { lastCenter, lastDistance } = pinchState.current;
+      if (!lastCenter || !lastDistance || lastDistance === 0) {
+        pinchState.current = { lastCenter: center, lastDistance: distance };
+        return;
+      }
+
+      const oldZoom = viewportZoom;
+      const zoomFactor = distance / lastDistance;
+      const newZoom = Math.min(MAX_SCALE, Math.max(MIN_SCALE, oldZoom * zoomFactor));
+
+      const centerDelta = {
+        x: center.x - lastCenter.x,
+        y: center.y - lastCenter.y,
+      };
+
+      const pannedOffset = {
+        x: stageOffset.x + centerDelta.x,
+        y: stageOffset.y + centerDelta.y,
+      };
+
+      const worldPoint = {
+        x: (center.x - pannedOffset.x) / oldZoom,
+        y: (center.y - pannedOffset.y) / oldZoom,
+      };
+
+      const newOffset = {
+        x: center.x - worldPoint.x * newZoom,
+        y: center.y - worldPoint.y * newZoom,
+      };
+
+      setViewportZoom(newZoom);
+      setStageOffset(newOffset);
+      pinchState.current = { lastCenter: center, lastDistance: distance };
+    },
+    [getTouchPoint, viewportZoom, stageOffset, setViewportZoom, setStageOffset, stageRef]
+  );
+
+  const handleTouchEnd = useCallback((e: Konva.KonvaEventObject<TouchEvent>) => {
+    if (e.evt.touches.length < 2) {
+      pinchState.current = { lastCenter: null, lastDistance: null };
+    }
   }, []);
 
   const handleStageClick = useCallback(
@@ -176,6 +270,9 @@ export const RoomCanvas: React.FC<RoomCanvasProps> = ({ containerWidth, containe
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       onClick={handleStageClick}
 
     >

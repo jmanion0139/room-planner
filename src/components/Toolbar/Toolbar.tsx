@@ -38,8 +38,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({ stageRef }) => {
   };
 
   return (
-    <header className="flex items-center gap-2 px-4 h-12 bg-gray-900 text-white shadow-lg flex-shrink-0">
-      <span className="font-bold text-sm tracking-wide mr-4 text-blue-300">Sectional Layout Visualizer</span>
+    <header className="flex items-center gap-2 px-3 md:px-4 min-h-12 py-2 bg-gray-900 text-white shadow-lg flex-shrink-0 flex-wrap">
+      <span className="font-bold text-sm tracking-wide mr-2 md:mr-4 text-blue-300">Room Planner</span>
 
       <div className="h-5 w-px bg-gray-600" />
 
@@ -87,8 +87,11 @@ export const Toolbar: React.FC<ToolbarProps> = ({ stageRef }) => {
 
       <div className="flex-1" />
 
-      <span className="text-xs text-gray-400">
+      <span className="hidden md:inline text-xs text-gray-400">
         {placedPieces.length} piece{placedPieces.length !== 1 ? 's' : ''} · Scroll to zoom · Middle-drag to pan · Delete to remove selected
+      </span>
+      <span className="md:hidden text-xs text-gray-400 w-full pt-1">
+        {placedPieces.length} piece{placedPieces.length !== 1 ? 's' : ''} · Pinch to zoom · Two-finger pan · Use Properties to rotate/remove
       </span>
     </header>
   );
