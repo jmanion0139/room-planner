@@ -24,7 +24,7 @@ function App() {
   const initialFitDone = useRef(false)
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>('pieces')
   const [mobileTab, setMobileTab] = useState<MobileTab>('pieces')
-  const [mobilePanelOpen, setMobilePanelOpen] = useState(true)
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false)
   const {
     room,
     scale,
