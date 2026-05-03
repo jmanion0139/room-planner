@@ -23,7 +23,7 @@ function App() {
   const [canvasSize, setCanvasSize] = useState({ width: 800, height: 600 })
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>('pieces')
   const [mobileTab, setMobileTab] = useState<MobileTab>('pieces')
-  const [mobilePanelOpen, setMobilePanelOpen] = useState(false)
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(true)
   const {
     viewportZoom,
     stageOffset,
@@ -124,7 +124,7 @@ function App() {
         {/* Canvas */}
         <main
           ref={canvasContainerRef}
-          className={`flex-1 overflow-hidden relative canvas-area ${mobilePanelOpen ? 'pb-[45vh] lg:pb-0' : 'pb-14 lg:pb-0'}`}
+          className={`flex-1 overflow-hidden relative canvas-area ${mobilePanelOpen ? 'pb-[50vh] lg:pb-0' : 'pb-24 lg:pb-0'}`}
         >
           <RoomCanvas
             containerWidth={canvasSize.width}
@@ -132,7 +132,7 @@ function App() {
             stageRef={stageRef}
           />
 
-          <div className="lg:hidden absolute right-3 bottom-3 z-10 flex flex-col gap-2">
+          <div className="lg:hidden absolute right-3 top-3 z-30 flex flex-col gap-2">
             <button
               onClick={handleMobileZoomIn}
               className="w-10 h-10 rounded-full bg-gray-900/90 text-white text-lg font-bold shadow-lg"
@@ -166,7 +166,7 @@ function App() {
         </aside>
 
         {/* Mobile bottom sheet */}
-        <aside className="lg:hidden absolute inset-x-0 bottom-0 z-20 bg-white/98 backdrop-blur border-t border-gray-200 shadow-2xl">
+        <aside className="lg:hidden absolute inset-x-0 bottom-0 z-20 bg-white/98 backdrop-blur border-t border-gray-200 shadow-2xl pb-[env(safe-area-inset-bottom)]">
           <div className="px-3 pt-2 pb-1 border-b border-gray-100">
             <button
               onClick={() => setMobilePanelOpen((v) => !v)}
@@ -197,7 +197,7 @@ function App() {
           </div>
 
           {mobilePanelOpen && (
-            <div className="max-h-[38vh] overflow-y-auto p-3 space-y-4">
+            <div className="max-h-[42vh] overflow-y-auto p-3 space-y-4">
               {mobileTab === 'pieces' && (
                 <>
                   <PieceLibrary />
