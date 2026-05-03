@@ -86,7 +86,7 @@ function App() {
     setStageOffset({ x: 40, y: 40 })
   }
 
-  const handleMobileFitToScreen = () => {
+  const handleFitToScreen = () => {
     const roomPxW = room.width * scale
     const roomPxH = room.height * scale
     if (roomPxW <= 0 || roomPxH <= 0 || canvasSize.width <= 0 || canvasSize.height <= 0) return
@@ -112,7 +112,7 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen min-h-[100dvh] bg-gray-100 overflow-hidden">
-      <Toolbar stageRef={stageRef} />
+      <Toolbar stageRef={stageRef} onFitToScreen={handleFitToScreen} />
 
       <div className="relative flex flex-1 overflow-hidden">
         {/* Left Sidebar */}
@@ -181,7 +181,7 @@ function App() {
               Reset
             </button>
             <button
-              onClick={handleMobileFitToScreen}
+              onClick={handleFitToScreen}
               className="px-2 h-9 rounded-full bg-white/95 text-xs font-semibold text-gray-700 shadow-lg border border-gray-200"
               title="Fit room to screen"
             >

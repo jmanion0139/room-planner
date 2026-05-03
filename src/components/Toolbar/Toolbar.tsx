@@ -5,9 +5,10 @@ import { exportPNG, exportJSON, importJSON } from '../../utils/export';
 
 interface ToolbarProps {
   stageRef: React.RefObject<Konva.Stage | null>;
+  onFitToScreen: () => void;
 }
 
-export const Toolbar: React.FC<ToolbarProps> = ({ stageRef }) => {
+export const Toolbar: React.FC<ToolbarProps> = ({ stageRef, onFitToScreen }) => {
   const { room, placedPieces, pieceDefinitions, loadLayout, resetLayout } = useLayoutStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -88,6 +89,14 @@ export const Toolbar: React.FC<ToolbarProps> = ({ stageRef }) => {
         title="Reset canvas"
       >
         Reset
+      </button>
+
+      <button
+        onClick={onFitToScreen}
+        className="hidden md:inline-flex text-xs px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded transition-colors font-medium"
+        title="Fit room to screen"
+      >
+        Fit Room
       </button>
 
       <div className="flex-1" />
