@@ -17,7 +17,7 @@ interface RoomCanvasProps {
   stageRef: React.RefObject<Konva.Stage | null>;
 }
 
-const MIN_SCALE = 1;
+const MIN_SCALE = 0.35;
 const MAX_SCALE = 10;
 
 export const RoomCanvas: React.FC<RoomCanvasProps> = ({ containerWidth, containerHeight, stageRef }) => {

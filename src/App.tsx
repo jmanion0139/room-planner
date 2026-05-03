@@ -12,7 +12,7 @@ import { useLayoutStore } from './store/layoutStore'
 type SidebarTab = 'pieces' | 'room'
 type MobileTab = 'pieces' | 'room' | 'properties'
 
-const MIN_ZOOM = 1
+const MIN_ZOOM = 0.35
 const MAX_ZOOM = 10
 
 function App() {
@@ -155,6 +155,16 @@ function App() {
               Reset
             </button>
           </div>
+
+          {!mobilePanelOpen && (
+            <button
+              onClick={() => setMobilePanelOpen(true)}
+              className="lg:hidden absolute bottom-3 left-1/2 -translate-x-1/2 z-30 px-4 h-10 rounded-full bg-white/95 text-sm font-semibold text-gray-700 shadow-lg border border-gray-200"
+              title="Show controls"
+            >
+              Show Controls
+            </button>
+          )}
         </main>
 
         {/* Right Properties Panel */}
