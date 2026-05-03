@@ -25,6 +25,8 @@ function App() {
   const [mobileTab, setMobileTab] = useState<MobileTab>('pieces')
   const [mobilePanelOpen, setMobilePanelOpen] = useState(true)
   const {
+    room,
+    scale,
     viewportZoom,
     stageOffset,
     setViewportZoom,
@@ -82,6 +84,30 @@ function App() {
   const handleMobileResetView = () => {
     setViewportZoom(1)
     setStageOffset({ x: 40, y: 40 })
+  }
+
+  const handleMobileFitToScreen = () => {
+    const roomPxW = room.width * scale
+    const roomPxH = room.height * scale
+    if (roomPxW <= 0 || roomPxH <= 0 || canvasSize.width <= 0 || canvasSize.height <= 0) return
+
+    const margin = 24
+    const availableW = Math.max(1, canvasSize.width - margin * 2)
+    const availableH = Math.max(1, canvasSize.height - margin * 2)
+
+    const fitZoom = Math.min(availableW / roomPxW, availableH / roomPxH)
+    const clampedZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, fitZoom))
+
+    const roomScreenW = roomPxW * clampedZoom
+    const roomScreenH = roomPxH * clampedZoom
+
+    const newOffset = {
+      x: (canvasSize.width - roomScreenW) / 2,
+      y: (canvasSize.height - roomScreenH) / 2,
+    }
+
+    setViewportZoom(clampedZoom)
+    setStageOffset(newOffset)
   }
 
   return (
@@ -153,6 +179,13 @@ function App() {
               title="Reset view"
             >
               Reset
+            </button>
+            <button
+              onClick={handleMobileFitToScreen}
+              className="px-2 h-9 rounded-full bg-white/95 text-xs font-semibold text-gray-700 shadow-lg border border-gray-200"
+              title="Fit room to screen"
+            >
+              Fit
             </button>
           </div>
 
