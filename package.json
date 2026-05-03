@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:room-layout": "tsc -b && vite build --base=/room-layout/",
+    "build:room-planner": "tsc -b && vite build --base=/room-planner/",
     "build:root": "tsc -b && vite build --base=/",
     "lint": "eslint .",
     "preview": "vite preview"
