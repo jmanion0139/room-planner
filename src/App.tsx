@@ -189,15 +189,7 @@ function App() {
             </button>
           </div>
 
-          {!mobilePanelOpen && (
-            <button
-              onClick={() => setMobilePanelOpen(true)}
-              className="lg:hidden absolute bottom-3 left-1/2 -translate-x-1/2 z-30 px-4 h-10 rounded-full bg-white/95 text-sm font-semibold text-gray-700 shadow-lg border border-gray-200"
-              title="Show controls"
-            >
-              Show Controls
-            </button>
-          )}
+
         </main>
 
         {/* Right Properties Panel */}
@@ -210,15 +202,15 @@ function App() {
 
         {/* Mobile bottom sheet */}
         <aside className="lg:hidden absolute inset-x-0 bottom-0 z-20 bg-white/98 backdrop-blur border-t border-gray-200 shadow-2xl pb-[env(safe-area-inset-bottom)]">
-          <div className="px-3 pt-2 pb-1 border-b border-gray-100">
-            <button
-              onClick={() => setMobilePanelOpen((v) => !v)}
-              className="w-full flex items-center justify-center gap-2 text-xs font-semibold text-gray-600"
-            >
-              <span className="inline-block w-12 h-1 rounded-full bg-gray-300" />
-              <span>{mobilePanelOpen ? 'Hide controls' : 'Show controls'}</span>
-            </button>
-          </div>
+          <button
+            onClick={() => setMobilePanelOpen((v) => !v)}
+            className="w-full flex items-center justify-center gap-2 py-3 border-b border-gray-200 active:bg-gray-50"
+          >
+            <span className="inline-block w-10 h-1 rounded-full bg-gray-300" />
+            <span className="text-sm font-semibold text-gray-600">
+              {mobilePanelOpen ? '▾ Hide Controls' : '▴ Controls'}
+            </span>
+          </button>
 
           <div className="flex border-b border-gray-200">
             {(['pieces', 'room', 'properties'] as MobileTab[]).map((tab) => (
