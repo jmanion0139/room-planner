@@ -20,7 +20,8 @@ function App() {
 
   const stageRef = useRef<Konva.Stage | null>(null)
   const canvasContainerRef = useRef<HTMLDivElement>(null)
-  const [canvasSize, setCanvasSize] = useState({ width: 800, height: 600 })
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 })
+  const initialFitDone = useRef(false)
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>('pieces')
   const [mobileTab, setMobileTab] = useState<MobileTab>('pieces')
   const [mobilePanelOpen, setMobilePanelOpen] = useState(true)
@@ -110,6 +111,15 @@ function App() {
     setStageOffset(newOffset)
   }
 
+  // Fit room to screen once on first real canvas measurement
+  useEffect(() => {
+    if (initialFitDone.current) return
+    if (canvasSize.width <= 0 || canvasSize.height <= 0) return
+    initialFitDone.current = true
+    handleFitToScreen()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canvasSize.width, canvasSize.height])
+
   return (
     <div className="flex flex-col h-screen min-h-[100dvh] bg-gray-100 overflow-hidden">
       <Toolbar stageRef={stageRef} onFitToScreen={handleFitToScreen} />
@@ -150,7 +160,7 @@ function App() {
         {/* Canvas */}
         <main
           ref={canvasContainerRef}
-          className={`flex-1 overflow-hidden relative canvas-area ${mobilePanelOpen ? 'pb-[50vh] lg:pb-0' : 'pb-24 lg:pb-0'}`}
+          className={`flex-1 overflow-hidden relative canvas-area ${mobilePanelOpen ? 'pb-[50vh] lg:pb-0' : 'lg:pb-0'}`}
         >
           <RoomCanvas
             containerWidth={canvasSize.width}
@@ -200,38 +210,43 @@ function App() {
           <PropertiesPanel />
         </aside>
 
-        {/* Mobile bottom sheet */}
-        <aside className="lg:hidden absolute inset-x-0 bottom-0 z-20 bg-white/98 backdrop-blur border-t border-gray-200 shadow-2xl pb-[env(safe-area-inset-bottom)]">
+        {/* Floating show-controls pill – lives outside canvas-area so touch-action:none never blocks it */}
+        {!mobilePanelOpen && (
           <button
-            onClick={() => setMobilePanelOpen((v) => !v)}
-            className="w-full flex items-center justify-center gap-2 py-3 border-b border-gray-200 active:bg-gray-50"
+            onClick={() => setMobilePanelOpen(true)}
+            className="lg:hidden absolute bottom-4 left-1/2 -translate-x-1/2 z-30 px-5 h-11 rounded-full bg-gray-900/90 text-white text-sm font-semibold shadow-xl"
           >
-            <span className="inline-block w-10 h-1 rounded-full bg-gray-300" />
-            <span className="text-sm font-semibold text-gray-600">
-              {mobilePanelOpen ? '▾ Hide Controls' : '▴ Controls'}
-            </span>
+            ▴ Controls
           </button>
+        )}
 
-          <div className="flex border-b border-gray-200">
-            {(['pieces', 'room', 'properties'] as MobileTab[]).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => {
-                  setMobileTab(tab)
-                  setMobilePanelOpen(true)
-                }}
-                className={`flex-1 text-xs font-semibold py-2.5 capitalize tracking-wide transition-colors ${
-                  mobileTab === tab
-                    ? 'text-blue-700 border-b-2 border-blue-600 bg-blue-50'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+        {/* Mobile bottom sheet */}
+        {mobilePanelOpen && (
+          <aside className="lg:hidden absolute inset-x-0 bottom-0 z-20 bg-white/98 backdrop-blur border-t border-gray-200 shadow-2xl pb-[env(safe-area-inset-bottom)]">
+            <button
+              onClick={() => setMobilePanelOpen(false)}
+              className="w-full flex items-center justify-center gap-2 py-3 border-b border-gray-200 active:bg-gray-50"
+            >
+              <span className="inline-block w-10 h-1 rounded-full bg-gray-300" />
+              <span className="text-sm font-semibold text-gray-600">▾ Hide Controls</span>
+            </button>
 
-          {mobilePanelOpen && (
+            <div className="flex border-b border-gray-200">
+              {(['pieces', 'room', 'properties'] as MobileTab[]).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setMobileTab(tab)}
+                  className={`flex-1 text-xs font-semibold py-2.5 capitalize tracking-wide transition-colors ${
+                    mobileTab === tab
+                      ? 'text-blue-700 border-b-2 border-blue-600 bg-blue-50'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+
             <div className="max-h-[42vh] overflow-y-auto p-3 space-y-4">
               {mobileTab === 'pieces' && (
                 <>
@@ -244,8 +259,8 @@ function App() {
               {mobileTab === 'room' && <RoomSettings />}
               {mobileTab === 'properties' && <PropertiesPanel />}
             </div>
-          )}
-        </aside>
+          </aside>
+        )}
       </div>
     </div>
   )
