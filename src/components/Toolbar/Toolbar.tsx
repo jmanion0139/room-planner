@@ -39,7 +39,12 @@ export const Toolbar: React.FC<ToolbarProps> = ({ stageRef }) => {
 
   return (
     <header className="flex items-center gap-2 px-3 md:px-4 min-h-12 py-2 bg-gray-900 text-white shadow-lg flex-shrink-0 flex-wrap">
-      <span className="font-bold text-sm tracking-wide mr-2 md:mr-4 text-blue-300">Room Planner</span>
+      <div className="flex items-center gap-2 mr-2 md:mr-4">
+        <span className="font-bold text-sm tracking-wide text-blue-300">Room Planner</span>
+        <span className="text-[10px] md:text-xs px-2 py-0.5 rounded-full border border-blue-300/50 bg-blue-500/10 text-blue-200">
+          v{__APP_VERSION__}
+        </span>
+      </div>
 
       <div className="h-5 w-px bg-gray-600" />
 
