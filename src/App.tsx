@@ -214,7 +214,8 @@ function App() {
         {!mobilePanelOpen && (
           <button
             onClick={() => setMobilePanelOpen(true)}
-            className="lg:hidden absolute bottom-4 left-1/2 -translate-x-1/2 z-30 px-5 h-11 rounded-full bg-gray-900/90 text-white text-sm font-semibold shadow-xl"
+            style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
+            className="lg:hidden absolute left-1/2 -translate-x-1/2 z-30 px-5 h-11 rounded-full bg-gray-900/90 text-white text-sm font-semibold shadow-xl"
           >
             ▴ Controls
           </button>
