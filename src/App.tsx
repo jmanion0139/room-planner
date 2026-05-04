@@ -8,6 +8,7 @@ import { RoomSettings } from './components/Sidebar/RoomSettings'
 import { PropertiesPanel } from './components/Properties/PropertiesPanel'
 import { usePersistence } from './hooks/usePersistence'
 import { useLayoutStore } from './store/layoutStore'
+import { RoomTabs } from './components/RoomTabs/RoomTabs'
 
 type SidebarTab = 'pieces' | 'room'
 type MobileTab = 'pieces' | 'room' | 'properties'
@@ -123,6 +124,7 @@ function App() {
   return (
     <div className="flex flex-col h-screen min-h-[100dvh] bg-gray-100 overflow-hidden">
       <Toolbar stageRef={stageRef} onFitToScreen={handleFitToScreen} />
+      <RoomTabs onAfterSwitch={handleFitToScreen} />
 
       <div className="relative flex flex-1 overflow-hidden">
         {/* Left Sidebar */}

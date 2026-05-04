@@ -39,3 +39,10 @@ export interface LayoutState {
   pieceDefinitions: PieceDefinition[];
   placedPieces: PlacedPiece[];
 }
+
+export interface RoomTab {
+  id: string;
+  name: string;
+  room: Room;
+  placedPieces: PlacedPiece[];
+}

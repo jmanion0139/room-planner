@@ -4,7 +4,9 @@ import type { LayoutState, PlacedPiece, PieceDefinition, Room, Obstacle, Rotatio
 import { DEFAULT_PIECES } from '../data/defaultPieces';
 import { inchesToPx } from '../utils/scale';
 
-const DEFAULT_ROOM: Room = {
+export type { LayoutState };
+
+export const DEFAULT_ROOM: Room = {
   width: 144, // 12 ft
   height: 168, // 14 ft
   obstacles: [],
@@ -39,6 +41,7 @@ interface StoreState extends LayoutState {
 
   // Layout persistence
   loadLayout: (state: LayoutState) => void;
+  loadRoomLayout: (room: Room, placedPieces: PlacedPiece[]) => void;
   resetLayout: () => void;
 
   // Viewport
@@ -202,6 +205,9 @@ export const useLayoutStore = create<StoreState>((set, get) => ({
       pieceDefinitions: state.pieceDefinitions,
       placedPieces: state.placedPieces,
     }),
+
+  loadRoomLayout: (room, placedPieces) =>
+    set({ room, placedPieces, selectedPieceIds: [] }),
 
   resetLayout: () =>
     set({
